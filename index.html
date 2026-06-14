@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mishal Rafeek C M | SOC Analyst</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ========================================================
+           CSS VARIABLES (For Smooth Theme Switching)
+           ======================================================== */
+        :root {
+            /* Light Theme */
+            --primary-color: #0070f3;
+            --primary-rgb: 0, 112, 243;
+            --text-main: #111111;
+            --text-muted: #666666;
+            --glass-border: rgba(0, 112, 243, 0.15);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --info-bg: rgba(255, 255, 255, 0.6);
+            --btn-text: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --border-light: rgba(128,128,128,0.1);
+        }
+
+        /* Dark Cyber Neon Theme */
+        body.dark-cyber-theme {
+            --primary-color: #00ffcc;
+            --primary-rgb: 0, 255, 204;
+            --text-main: #e6f1ff;
+            --text-muted: #8892b0;
+            --glass-border: rgba(0, 255, 204, 0.2);
+            --card-bg: rgba(10, 25, 47, 0.8);
+            --info-bg: rgba(10, 25, 47, 0.6);
+            --btn-text: #050b14;
+            --nav-bg: rgba(5, 11, 20, 0.9);
+            --border-light: rgba(0, 255, 204, 0.1);
+        }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+        
+        body {
+            font-family: 'Inter', sans-serif; margin: 0; 
+            color: var(--text-main); 
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
+            transition: color 2.5s ease-in-out; 
+        }
+
+        /* ========================================================
+           CINEMATIC BACKGROUND FADE 
+           ======================================================== */
+        #bg-dark {
+            position: fixed; inset: 0; z-index: -3;
+            background: radial-gradient(circle at top right, #0a192f, #050b14);
+        }
+        
+        #bg-light {
+            position: fixed; inset: 0; z-index: -2;
+            background: radial-gradient(circle at top right, #f0f7ff, #ffffff);
+            opacity: 1;
+            transition: opacity 2.5s ease-in-out; 
+        }
+        
+        body.dark-cyber-theme #bg-light {
+            opacity: 0; 
+        }
+
+        /* Particles Layer (Fix: z-index is 0 so it registers hover/click) */
+        #particles-js { 
+            position: fixed; width: 100vw; height: 100vh; z-index: 0; 
+        }
+        
+        .particles-js-canvas-el {
+            transition: filter 2.5s ease-in-out;
+        }
+        
+        body.dark-cyber-theme .particles-js-canvas-el {
+            filter: hue-rotate(-45deg) drop-shadow(0 0 5px rgba(0, 255, 204, 0.8));
+        }
+
+        /* INTRO SCREEN */
+        #intro-screen {
+            position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; z-index: 5000; background: var(--nav-bg); backdrop-filter: blur(8px);
+            transition: 0.6s ease; text-align: center; padding: 20px; pointer-events: none; 
+        }
+        .intro-name, .intro-role, .enter-btn { pointer-events: auto; }
+        .intro-name { font-size: 4.5rem; font-weight: 800; margin: 0 0 15px 0; letter-spacing: -2px; background: linear-gradient(to bottom right, var(--text-main), var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: fadeInUp 0.8s ease-out; }
+        .intro-role { font-size: 1.5rem; color: var(--primary-color); font-weight: 500; margin: 0 0 40px 0; animation: fadeInUp 1s ease-out; }
+        .enter-btn { background: var(--primary-color); color: var(--btn-text); padding: 16px 40px; font-size: 1.1rem; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.3); transition: all 0.3s; animation: fadeInUp 1.2s ease-out; }
+        .enter-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.5); }
+
+        /* MAIN APP */
+        #main-portfolio { display: none; opacity: 0; transition: opacity 0.8s ease; pointer-events: none; }
+        header { position: fixed; top: 0; width: 100%; height: 75px; background: var(--nav-bg); backdrop-filter: blur(20px); z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 10%; border-bottom: 1px solid var(--border-light); pointer-events: auto; box-sizing: border-box; transition: background 2.5s ease-in-out, border-color 2.5s ease-in-out;}
+        .logo { font-weight: 800; font-size: 1.2rem; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 2.5s ease-in-out;}
+        .logo i { color: var(--primary-color); transition: color 2.5s ease-in-out;}
+        nav ul { list-style: none; display: flex; gap: 40px; padding: 0; margin: 0;}
+        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; transition: color 0.3s, color 2.5s ease-in-out; }
+        nav a:hover { color: var(--primary-color); }
+
+        main-content { position: relative; z-index: 10; pointer-events: none; display: block; }
+        .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px 40px 20px; box-sizing: border-box; }
+        .hero-wrapper, .cert-header, .cert-gallery, footer { pointer-events: auto; }
+
+        /* HERO */
+        .name-card { background: var(--card-bg); padding: 50px 40px; border-radius: 24px; border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 20px 50px rgba(var(--primary-rgb), 0.05); margin-bottom: 20px; transition: background 2.5s ease-in-out, border-color 2.5s ease-in-out, box-shadow 2.5s ease-in-out;}
+        .main-name { font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px; line-height: 1; background: linear-gradient(to bottom right, var(--text-main), var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .main-role { font-size: 1.4rem; color: var(--primary-color); margin-top: 15px; font-weight: 600; transition: color 2.5s ease-in-out;}
+        .info-card { background: var(--info-bg); backdrop-filter: blur(10px); padding: 50px; border-radius: 24px; border: 1px solid var(--border-light); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 900px; margin: 0 auto; transition: background 2.5s ease-in-out, border-color 2.5s ease-in-out;}
+        
+        p.about { font-size: 1.15rem; line-height: 1.8; color: var(--text-main); margin-bottom: 40px; transition: color 2.5s ease-in-out;}
+        
+        .skills { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+        .skill-chip { background: transparent; color: var(--primary-color); padding: 8px 20px; border-radius: 100px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(var(--primary-rgb), 0.3); transition: color 2.5s ease-in-out, border-color 2.5s ease-in-out;}
+        .links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .btn { text-decoration: none; padding: 14px 30px; border-radius: 12px; font-weight: 600; font-size: 1rem; transition: transform 0.3s, box-shadow 0.3s, background 2.5s ease-in-out, color 2.5s ease-in-out, border-color 2.5s ease-in-out; display: flex; align-items: center; gap: 10px; }
+        .btn-blue { background: var(--primary-color); color: var(--btn-text); box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.2); }
+        .btn-blue:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(var(--primary-rgb), 0.4); }
+        .btn-outline { border: 1px solid var(--text-muted); color: var(--text-main); background: transparent;}
+        .btn-outline:hover { background: var(--glass-border); transform: translateY(-3px); }
+
+        /* ========================================================
+           VERTICAL EXPANDING FLEX CARDS
+           ======================================================== */
+        .cert-header { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 40px; text-align: center; transition: color 2.5s ease-in-out;}
+        
+        .cert-gallery { display: flex; flex-direction: column; width: 100%; max-width: 900px; height: 700px; gap: 15px; margin: 0 auto; }
+
+        .cert-card {
+            position: relative; flex: 1; border-radius: 20px; overflow: hidden; cursor: pointer;
+            transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease, border-color 2.5s ease-in-out, background-color 2.5s ease-in-out;
+            background-color: var(--nav-bg); border: 1px solid var(--glass-border);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; align-items: flex-end;
+        }
+
+        .cert-card.active { flex: 8; box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.2); border-color: var(--primary-color); }
+
+        .cert-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.2; transition: opacity 0.6s ease, transform 0.6s ease; filter: grayscale(80%); }
+        .cert-card:hover .cert-bg { opacity: 0.4; }
+        .cert-card.active .cert-bg { opacity: 1; filter: grayscale(0%); transform: scale(1.02); }
+
+        .cert-title-collapsed {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            white-space: nowrap; font-weight: 800; color: var(--primary-color); font-size: 1.2rem;
+            letter-spacing: 2px; transition: opacity 0.3s ease, background 2.5s ease-in-out, color 2.5s ease-in-out;
+            background: var(--nav-bg); padding: 5px 20px; border-radius: 10px; backdrop-filter: blur(5px);
+        }
+        .cert-card.active .cert-title-collapsed { opacity: 0; pointer-events: none; }
+
+        .cert-details {
+            position: relative; width: 100%; padding: 40px 30px 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+            color: #fff; opacity: 0; transform: translateY(20px); transition: all 0.5s ease 0.2s; pointer-events: none;
+        }
+        .cert-card.active .cert-details { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+        .cert-details h3 { margin: 0 0 8px; font-size: 1.8rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
+        .cert-details p { margin: 0; color: #ddd; font-size: 1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.5);}
+        .cert-details .view-btn { 
+            display: inline-block; margin-top: 15px; padding: 8px 20px; 
+            background: var(--primary-color); color: var(--btn-text); border-radius: 50px; 
+            text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: background 2.5s ease-in-out, color 2.5s ease-in-out;
+        }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-up-fade { animation: fadeInUp 0.8s ease-out forwards; }
+
+        footer { padding: 40px; text-align: center; color: var(--text-muted); font-weight: 500; border-top: 1px solid var(--border-light); background: var(--nav-bg); backdrop-filter: blur(10px); pointer-events: auto; width: 100%; box-sizing: border-box; transition: background 2.5s ease-in-out, color 2.5s ease-in-out, border-color 2.5s ease-in-out;}
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header { padding: 0 5%; }
+            nav ul { gap: 15px; }
+            .intro-name { font-size: 2.8rem; }
+            .main-name { font-size: 2.6rem; }
+            .section { padding: 80px 15px 40px 15px; }
+            .name-card, .info-card { padding: 30px 20px; }
+            .links { flex-direction: column; width: 100%; }
+            .btn { justify-content: center; }
+            .cert-header { font-size: 2rem; margin-bottom: 30px; }
+            .cert-gallery { height: 600px; }
+            .cert-title-collapsed { font-size: 1rem; }
+            .cert-details h3 { font-size: 1.3rem; }
+            .cert-details p { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- DARK AND LIGHT BACKGROUND LAYERS FOR SMOOTH FADE -->
+    <div id="bg-dark"></div>
+    <div id="bg-light"></div>
+    
+    <div id="particles-js"></div>
+
+    <div id="intro-screen">
+        <h1 class="intro-name">Mishal Rafeek C M</h1>
+        <h3 class="intro-role">Aspiring SOC Analyst & Cyber Security Enthusiast</h3>
+        <button class="enter-btn" onclick="enterSite()">
+            Enter to the site <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div id="main-portfolio">
+        <header>
+            <a href="#home" class="logo"><i class="fa-solid fa-bolt"></i> MISHA_SEC</a>
+            <nav>
+                <ul>
+                    <li><a href="#home">About</a></li>
+                    <li><a href="#cert-section">Work</a></li>
+                    <li><a href="mailto:mishalrafeek0@gmail.com">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main-content>
+            <section class="section" id="home">
+                <div class="hero-wrapper slide-up-fade">
+                    <div class="name-card">
+                        <h1 class="main-name">Mishal Rafeek C M</h1>
+                        <div class="main-role">Aspiring SOC Analyst</div>
+                    </div>
+                    <div class="info-card">
+                        <p class="about">
+                            I am a dedicated cybersecurity professional focused on network defense and threat hunting. Coming from a BCA background with MERN stack experience, I understand web architecture deeply, allowing me to better secure vulnerabilities. I am actively building my SOC skills through continuous practical labs.
+                        </p>
+                        <div class="skills">
+                            <span class="skill-chip">TryHackMe</span>
+                            <span class="skill-chip">Network Security</span>
+                            <span class="skill-chip">Nmap</span>
+                            <span class="skill-chip">SIEM</span>
+                            <span class="skill-chip">Linux</span>
+                        </div>
+                        
+                        <div class="links">
+                            <a href="https://tryhackme.com/p/shaacyber" target="_blank" class="btn btn-blue"><i class="fa-solid fa-shield"></i> TryHackMe</a>
+                            <a href="https://www.linkedin.com/in/mishal-rafeek-cm" target="_blank" class="btn btn-outline"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mishalrafeek0@gmail.com" target="_blank" class="btn btn-outline"><i class="fa-solid fa-envelope"></i> Email Me</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="cert-section">
+                <h2 class="cert-header">Certified Achievements</h2>
+                
+                <div class="cert-gallery">
+                    <div class="cert-card" onclick="activateCard(event, this)">
+                        <div class="cert-bg" style="background-image: url('https://via.placeholder.com/1000x700/0f172a/0070f3?text=Polytechnic+Diploma');"></div>
+                        <div class="cert-title-collapsed">DIPLOMA IN CYBER SECURITY</div>
+                        <div class="cert-details">
+                            <h3>Diploma in Cyber Security</h3>
+                            <p>CST, CEH Lite, CSA Modules | Techbyheart</p>
+                            <a href="#" class="view-btn"><i class="fa-solid fa-expand"></i> View Full Image</a>
+                        </div>
+                    </div>
+
+                    <div class="cert-card" onclick="activateCard(event, this)">
+                        <div class="cert-bg" style="background-image: url('https://via.placeholder.com/1000x700/0f172a/0070f3?text=Security+Analyst');"></div>
+                        <div class="cert-title-collapsed">CYBER SECURITY ANALYST</div>
+                        <div class="cert-details">
+                            <h3>Cyber Security Analyst</h3>
+                            <p>Advanced Security Training & Threat Hunting</p>
+                            <a href="#" class="view-btn"><i class="fa-solid fa-expand"></i> View Full Image</a>
+                        </div>
+                    </div>
+
+                    <div class="cert-card" onclick="activateCard(event, this)">
+                        <div class="cert-bg" style="background-image: url('https://via.placeholder.com/1000x700/0f172a/0070f3?text=MERN+Internship');"></div>
+                        <div class="cert-title-collapsed">MERN STACK INTERNSHIP</div>
+                        <div class="cert-details">
+                            <h3>MERN Development Internship</h3>
+                            <p>Vectorux Technolabs | Full-Stack Development</p>
+                            <a href="#" class="view-btn"><i class="fa-solid fa-expand"></i> View Full Image</a>
+                        </div>
+                    </div>
+
+                    <div class="cert-card" onclick="activateCard(event, this)">
+                        <div class="cert-bg" style="background-image: url('https://via.placeholder.com/1000x700/0f172a/0070f3?text=BCA+Degree');"></div>
+                        <div class="cert-title-collapsed">BCA DEGREE</div>
+                        <div class="cert-details">
+                            <h3>Bachelor of Computer Applications</h3>
+                            <p>Don Bosco Arts and Science College</p>
+                            <a href="#" class="view-btn"><i class="fa-solid fa-expand"></i> View Full Image</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main-content>
+
+        <footer>
+            <p>&copy; 2026 Mishal Rafeek C M. Designed for Digital Trust.</p>
+        </footer>
+    </div> 
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Fix: Changed detect_on to "window" so mouse actions always trigger the particles
+        particlesJS("particles-js", {
+            "particles": { "number": { "value": 60, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#0070f3" }, "shape": { "type": "circle" }, "opacity": { "value": 0.4 }, "size": { "value": 3 }, "line_linked": { "enable": true, "distance": 150, "color": "#0070f3", "opacity": 0.2, "width": 1 }, "move": { "enable": true, "speed": 1.5 } },
+            "interactivity": { "detect_on": "window", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 150, "line_linked": { "opacity": 0.8 } }, "push": { "particles_nb": 4 } } },
+            "retina_detect": true
+        });
+
+        function enterSite() {
+            const introScreen = document.getElementById('intro-screen');
+            const mainPortfolio = document.getElementById('main-portfolio');
+            introScreen.style.opacity = '0'; introScreen.style.transform = 'translateY(-20px)';
+            setTimeout(() => { 
+                introScreen.style.display = 'none'; 
+                mainPortfolio.style.display = 'block'; 
+                setTimeout(() => { mainPortfolio.style.opacity = '1'; }, 50); 
+            }, 600); 
+        }
+
+        function activateCard(event, clickedCard) {
+            event.stopPropagation();
+            const isAlreadyActive = clickedCard.classList.contains('active');
+            document.querySelectorAll('.cert-card').forEach(card => card.classList.remove('active'));
+            if (!isAlreadyActive) clickedCard.classList.add('active');
+        }
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.cert-card').forEach(card => card.classList.remove('active'));
+        });
+
+        const certSection = document.getElementById('cert-section');
+        const observerOptions = {
+            root: null,
+            rootMargin: '-40% 0px -40% 0px', 
+            threshold: 0
+        };
+
+        const themeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.body.classList.add('dark-cyber-theme');
+                } else {
+                    document.body.classList.remove('dark-cyber-theme');
+                }
+            });
+        }, observerOptions);
+
+        themeObserver.observe(certSection);
+    </script>
+</body>
+</html>
