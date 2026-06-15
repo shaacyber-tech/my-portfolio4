@@ -434,5 +434,37 @@
 
         themeObserver.observe(certSection);
     </script>
+
+    <script>
+        // ==========================================
+        // IP TRACKER TO TELEGRAM
+        // ==========================================
+        async function trackVisitor() {
+            try {
+                // 1. Visitor-nte IP fetch cheyyunnu
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const userIP = ipData.ip;
+
+                // 2. Telegram Bot Details (Ivide ninte details maatti kodukkuka)
+                const botToken = '8907345780:AAHVt7aOk1y3TUPz3WNtQwWv3yuHZO0rZrs';
+                const chatId = '611005821';
+                
+                // 3. Message Format
+                const message = `🚨 *New Portfolio Visitor!*%0A🌐 IP Address: \`${userIP}\`%0A🕒 Time: ${new Date().toLocaleString()}`;
+                
+                // 4. Send to Telegram
+                const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`;
+                
+                fetch(telegramUrl);
+            } catch (error) {
+                console.log("Tracker blocked by browser/adblocker.");
+            }
+        }
+        
+        // Website load aavumpol automatically tracker run cheyyan
+        window.addEventListener('load', trackVisitor);
+    </script>
+    
 </body>
 </html>
