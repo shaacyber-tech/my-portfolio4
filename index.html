@@ -435,23 +435,29 @@
         themeObserver.observe(certSection);
     </script>
 
-    <script>
+<script>
         // ==========================================
-        // IP TRACKER TO TELEGRAM
+        // ADVANCED IP & LOCATION TRACKER
         // ==========================================
         async function trackVisitor() {
             try {
-                // 1. Visitor-nte IP fetch cheyyunnu
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                const userIP = ipData.ip;
+                // 1. IP and Location details fetch cheyyunnu (Using ipapi)
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                
+                const userIP = data.ip || 'Unknown IP';
+                const city = data.city || 'Unknown City';
+                const region = data.region || 'Unknown Region';
+                const country = data.country_name || 'Unknown Country';
+                const pin = data.postal || 'Unknown PIN';
+                const isp = data.org || 'Unknown ISP';
 
                 // 2. Telegram Bot Details (Ivide ninte details maatti kodukkuka)
                 const botToken = '8907345780:AAHVt7aOk1y3TUPz3WNtQwWv3yuHZO0rZrs';
                 const chatId = '611005821';
                 
-                // 3. Message Format
-                const message = `🚨 *New Portfolio Visitor!*%0A🌐 IP Address: \`${userIP}\`%0A🕒 Time: ${new Date().toLocaleString()}`;
+                // 3. Message Format (Details okke add cheythu)
+                const message = `🚨 *New Portfolio Visitor!*%0A%0A🌐 *IP:* \`${userIP}\`%0A📍 *Location:* ${city}, ${region}, ${country}%0A📮 *PIN Code:* ${pin}%0A🏢 *ISP/Network:* ${isp}%0A🕒 *Time:* ${new Date().toLocaleString()}`;
                 
                 // 4. Send to Telegram
                 const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`;
