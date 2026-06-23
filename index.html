@@ -102,7 +102,7 @@
 
         main-content { position: relative; z-index: 10; pointer-events: none; display: block; }
         .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px 40px 20px; box-sizing: border-box; }
-        .hero-wrapper, .cert-header, .cert-gallery, footer { pointer-events: auto; }
+        .hero-wrapper, .cert-header, .cert-gallery, .projects-grid, footer { pointer-events: auto; }
 
         /* HERO */
         .name-card { background: var(--card-bg); padding: 50px 40px; border-radius: 24px; border: 1px solid var(--glass-border); text-align: center; box-shadow: 0 20px 50px rgba(var(--primary-rgb), 0.05); margin-bottom: 20px; transition: background 2.5s ease-in-out, border-color 2.5s ease-in-out, box-shadow 2.5s ease-in-out;}
@@ -221,6 +221,65 @@
             letter-spacing: 1px;
         }
 
+        /* ========================================================
+           PROJECTS & REPORTS SECTION
+           ======================================================== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            pointer-events: auto;
+        }
+
+        .project-card {
+            background: var(--info-bg);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 2.5s ease-in-out, border-color 2.5s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .project-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .project-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            flex-grow: 1;
+            transition: color 2.5s ease-in-out;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .project-links .btn {
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            flex: 1;
+            justify-content: center;
+        }
+
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .slide-up-fade { animation: fadeInUp 0.8s ease-out forwards; }
 
@@ -247,12 +306,15 @@
             .sub-card { min-height: 120px; padding: 20px; }
             .sub-card h4 { font-size: 1.1rem; }
             .sub-card .view-btn { padding: 6px 15px; font-size: 0.8rem; margin-top: 8px;}
+
+            /* Responsive for Projects */
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-links { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <!-- DARK AND LIGHT BACKGROUND LAYERS FOR SMOOTH FADE -->
     <div id="bg-dark"></div>
     <div id="bg-light"></div>
     
@@ -273,6 +335,7 @@
                 <ul>
                     <li><a href="#home">About</a></li>
                     <li><a href="#cert-section">Work</a></li>
+                    <li><a href="#projects-section">Projects</a></li>
                     <li><a href="mailto:mishalrafeek0@gmail.com">Contact</a></li>
                 </ul>
             </nav>
@@ -311,29 +374,22 @@
                 
                 <div class="cert-gallery">
                     
-                    <!-- BOX 1: INTERNSHIPS (WITH SUB-BOXES) -->
                     <div class="cert-card" onclick="activateCard(event, this)">
-                        <!-- Main Box Background -->
                         <div class="cert-bg" style="background-image: url('https://via.placeholder.com/1000x700/0f172a/00ffcc?text=Internships');"></div>
                         
-                        <!-- Main Box Title -->
                         <div class="cert-title-collapsed">INTERNSHIPS</div>
                         
-                        <!-- Expanded Content (Fix: onclick="event.stopPropagation()" prevents accordion from closing when clicking inside) -->
                         <div class="cert-details" onclick="event.stopPropagation()">
                             <h3>Internships</h3>
                             
-                            <!-- 2 Nested Sub-Cards -->
                             <div class="sub-cards-container">
                                 
-                                <!-- Sub Card 1: Vectorux -->
                                 <div class="sub-card">
                                     <div class="sub-card-bg" style="background-image: url('vectorux.jpg');"></div>
                                     <h4>Vectorux</h4>
                                     <a href="vectorux.jpg" target="_blank" class="view-btn"><i class="fa-solid fa-expand"></i> View Certificate</a>
                                 </div>
                                 
-                                <!-- Sub Card 2: Microsoft -->
                                 <div class="sub-card">
                                     <div class="sub-card-bg" style="background-image: url('microsoft.jpg');"></div>
                                     <h4>Microsoft</h4>
@@ -344,7 +400,6 @@
                         </div>
                     </div>
 
-                    <!-- BOX 2 -->
                     <div class="cert-card" onclick="activateCard(event, this)">
                         <div class="cert-bg" style="background-image: url('https://via.placeholder.com/1000x700/0f172a/0070f3?text=Security+Analyst');"></div>
                         <div class="cert-title-collapsed">CYBER SECURITY ANALYST</div>
@@ -355,7 +410,6 @@
                         </div>
                     </div>
 
-                    <!-- BOX 3 -->
                     <div class="cert-card" onclick="activateCard(event, this)">
                         <div class="cert-bg" style="background-image: url('https://via.placeholder.com/1000x700/0f172a/0070f3?text=MERN+Internship');"></div>
                         <div class="cert-title-collapsed">MERN STACK INTERNSHIP</div>
@@ -366,7 +420,6 @@
                         </div>
                     </div>
 
-                    <!-- BOX 4 -->
                     <div class="cert-card" onclick="activateCard(event, this)">
                         <div class="cert-bg" style="background-image: url('https://via.placeholder.com/1000x700/0f172a/0070f3?text=BCA+Degree');"></div>
                         <div class="cert-title-collapsed">BCA DEGREE</div>
@@ -378,6 +431,42 @@
                     </div>
                 </div>
             </section>
+
+            <section class="section" id="projects-section">
+                <h2 class="cert-header">Projects & Reports</h2>
+                
+                <div class="projects-grid">
+                    
+                    <div class="project-card">
+                        <h3>CyberShield Platform</h3>
+                        <p>A full-stack web application focused on cybersecurity. Handled the frontend architecture and database integrations to ensure secure data flow and user management.</p>
+                        <div class="skills">
+                            <span class="skill-chip">React.js</span>
+                            <span class="skill-chip">Node.js</span>
+                            <span class="skill-chip">MongoDB</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="btn btn-outline"><i class="fa-brands fa-github"></i> Code</a>
+                            <a href="#" class="btn btn-blue"><i class="fa-solid fa-file-pdf"></i> Report</a>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <h3>Vulnerability Assessment Report</h3>
+                        <p>Comprehensive penetration testing and network vulnerability assessment report identifying critical flaws and providing remediation steps.</p>
+                        <div class="skills">
+                            <span class="skill-chip">Nmap</span>
+                            <span class="skill-chip">Metasploit</span>
+                            <span class="skill-chip">Burp Suite</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="vapt-report1.pdf" target="_blank" class="btn btn-blue"><i class="fa-solid fa-file-pdf"></i> View Report</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
         </main-content>
 
         <footer>
@@ -433,9 +522,13 @@
         }, observerOptions);
 
         themeObserver.observe(certSection);
+        
+        // Make sure the new Projects section also triggers the dark theme
+        const projectsSection = document.getElementById('projects-section');
+        themeObserver.observe(projectsSection);
     </script>
 
-<script>
+    <script>
         async function trackVisitor() {
             try {
                 const response = await fetch('https://ipapi.co/json/');
